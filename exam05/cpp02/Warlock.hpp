@@ -1,29 +1,28 @@
-#ifndef WARLOCK_HPP
+#ifndef	WARLOCK_HPP
 # define WARLOCK_HPP
 
-# include <iostream>
 # include <string>
+# include <iostream>
+# include "SpellBook.hpp"
 # include "ASpell.hpp"
 # include "ATarget.hpp"
-# include "SpellBook.hpp"
 
 class	Warlock {
 	public:
-		Warlock(const std::string &n, const std::string &t);
-		virtual	~Warlock(void);
-
+		Warlock(std::string name, std::string title);
+		~Warlock(void);
 		const std::string	&getName(void) const;
 		const std::string	&getTitle(void) const;
-		void				setTitle(const std::string &t);
+		void				setTitle(const std::string &title);
 		void				introduce(void) const;
 		void				learnSpell(ASpell *s);
-		void				forgetSpell(const std::string &s);
-		void				launchSpell(const std::string &s, const ATarget &t);
+		void				forgetSpell(const std::string &n);
+		void				launchSpell(const std::string &n, const ATarget &t);
 
 	private:
-		std::string		_name;
-		std::string		_title;
-		SpellBook		_spells;
+		std::string				_name;
+		std::string				_title;
+		SpellBook				_spells;
 
 		Warlock(void);
 		Warlock(const Warlock &other);
