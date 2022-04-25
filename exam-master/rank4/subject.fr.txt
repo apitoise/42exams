@@ -1,0 +1,43 @@
+Assignement name: microshell
+Expected files: *.c *.h
+Allowed functions: malloc, free, write, close, fork, waitpid, signal, kill, exit, chdir,
+execve, dup, dup2, pipe, strcmp, strncmp
+
+Ecrire un programme qui ressemble a un executeur de commande shell:
+	- La ligne de commande a executer sera passee en argument du programme.
+	- Les executables seront appeles avec un chemin relatif ou absolu mais votre
+	programme ne doit pas construire de chemin (en utilisant la variable d'environnement
+	PATH par exemple).
+	- Votre programme doit implementer "|" et ";" comme dans bash
+		- Nous n'essaierons jamais un "|" immediatement suivi ou precede par rien ou
+		autre "|" ou un ";".
+	- Votre programme doit implementer la commande "built-in" cd et seulement avec un
+	chemin en argument (pas de '-' ou sans argument).
+		- Si cd n'a pas le bon nombre d'arguments votre programme devra afficher dans
+		STDERR "error: cd: bad arguments" suivi d'un '\n'.
+		- Si cd a echoue votre programme devra afficher dans STDERR "error: cd: cannot
+		change directory to path_to_change" suivi d'un '\n' avec path_to_change
+		remplace par l'argument du cd.
+		- Une commande cd ne sera jamais immediatement precedee ou suivie par un "|".
+	- Votre programme n'a pas a gerer les "wildcards" (*, ~, etc...).
+	- Votre programme n'a pas a gerer les variables d'environnement ($BLA...).
+	- Si un appel systeme, sauf execve et chdir, retourne une erreur votre programme
+	devra immediatement afficher dans STDERR "error: fatal" suivi d'un '\n' et sortir.
+	- Si execve echoue votre programme doit afficher dans STDERR "error: cannot execute
+	executable_that_failed" suivi d'un '\n' en ayant remplace executable_that_failed avec
+	le chemin du programme qui n'a pu etre execute (ca devrait etre le premier argument
+	de execve)
+	- Votre programme devrait pouvoir accepter des centaines de "|" meme si la limite du
+	nombre de "fichiers ouverts" et inferieur a 30.
+
+Par exemple les commandes suivantes doivent marcher:
+$>./microshell /bin/ls "|" /usr/bin/grep microshell ";" /bin/echo i love my microshell
+micoshell
+i love my microshell
+$>./microshell /bin/echo WOOT "; /bin/echo NOPE;" "; ;" ";" /bin/echo YEAH
+WOOT ; /bin/echo NOPE; ; ;
+YEAH
+
+Conseils:
+- N'oubliez pas de passer les variables d'environnement a execve
+- Ne fuitez pas de file descriptors !
